@@ -4,6 +4,7 @@ const API_URL = "http://localhost:8080";
 
 function App() {
   const [data, setData] = useState<string>();
+  const [verifyMessage, setVerifyMessage] = useState<string>();
 
   useEffect(() => {
     getData();
@@ -24,12 +25,15 @@ function App() {
         "Content-Type": "application/json",
       },
     });
-
     await getData();
+    setVerifyMessage("");
   };
 
   const verifyData = async () => {
-    throw new Error("Not implemented");
+    const response = await fetch(`${API_URL}/verify`);
+    const {data, message} = await response.json();
+    setData(data);
+    setVerifyMessage(message);
   };
 
   return (
@@ -63,6 +67,7 @@ function App() {
           Verify Data
         </button>
       </div>
+      <span>{verifyMessage}</span>
     </div>
   );
 }
